@@ -63,6 +63,14 @@ class Api extends REST_Controller {
 		$this->response($r); 
 	}
 	
+	//Submissions
+	
+	public function subm_get() {
+		$id = $this->uri->segment(3);
+		$r = $this->subm_model->read($id);
+		$this->response($r); 
+	}
+	
 	//Room
 	
 	public function room_get(){
