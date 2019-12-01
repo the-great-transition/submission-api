@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+set_time_limit(600);
 
 require(APPPATH.'/libraries/REST_Controller.php');
 use Restserver\Libraries\REST_Controller;
@@ -22,28 +23,18 @@ TABLE RONDE : 6 variables + nb de panélistes + 3 variables
 PANÉLISTE : 10 variables
 */
 
-class Import extends REST_Controller {
+class Import2 extends REST_Controller {
 	
 	public function __construct() {
 		parent::__construct();
-		$this->load->model('Import_model');
+		$this->load->model('Import2_model');
 		
 	}
 	
-	public function import_get() {
-		$filename = APPPATH.'/uploads/test_data_an.csv';
-		if (($h = fopen("{$filename}", "r")) !== FALSE) {
-			$reference = fgetcsv($h, 999999, ",");
-			while (($data = fgetcsv($h, 999999, ",")) !== FALSE) {
-				$array[] = $data;
-			}
-			fclose($h);
-		}
-		$r = $this->import_model->import($array);
-		$this->response($r); 
-		/*echo "<pre>";
-		var_dump($this);
-		echo "</pre>";*/
+	public function import2_get() {
+		//Forms: FR: 3553260, AN: 3553261
+		$r = $this->import2_model->import2(3553260,'fr');
+		$this->response($r);
 	}
 	
 }

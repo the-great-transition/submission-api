@@ -17,7 +17,6 @@ class Subm_model extends CI_Model {
 				array_push($array_appended, $s);
 			}
 			return ($array_appended);
-			//return $query->result_array();
 		}
 		$query = $this->db->get_where($t,array($t.'_id' => $id));
 		return $query->result_array();

@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-function slugify($text) {
+//Removed because of conflict with Import2
+/*function slugify($text) {
   $text = preg_replace('~[^\pL\d]+~u', '-', $text);
   $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
   $text = preg_replace('~[^-\w]+~', '', $text);
@@ -77,10 +78,10 @@ function associateSubm($input) {
 		'subm_slug' => $input[2],
 		'subm_title' => $input[3],
 		'subm_description' => $input[4],
-		'subm_language' => $reference_subm_fr['subm_language'][$input[5]],
-		'subm_level' => $reference_subm_fr['subm_level'][$input[6]],
-		'subm_theme' => $reference_subm_fr['subm_theme'][str_replace("&#039;", "", $input[7])],
-		'subm_orientation' => $reference_subm_fr['subm_orientation'][$input[8]],
+		'subm_language' => $reference_subm_an['subm_language'][$input[5]],
+		'subm_level' => $reference_subm_an['subm_level'][$input[6]],
+		'subm_theme' => $reference_subm_an['subm_theme'][str_replace("&#039;", "", $input[7])],
+		'subm_orientation' => $reference_subm_an['subm_orientation'][$input[8]],
 		'subm_type' => $input[9],
 		'subm_status' => $input[10],
 		'subm_forms' => $input[11],
@@ -110,7 +111,7 @@ function associatePart($input) {
 		'part_meta' => $input[14]
 	);
 	return $array;
-}
+}*/
 
 class Import_model extends CI_Model {
 
