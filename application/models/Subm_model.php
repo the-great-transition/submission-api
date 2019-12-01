@@ -6,6 +6,7 @@ class Subm_model extends CI_Model {
 	public function read($id) {
 		$t = 'subm';
 		if ($id === null) {
+			$this->db->order_by('subm_time', 'ASC');
 			$query = $this->db->get($t);
 			$array = $query->result_array();
 			$array_appended = [];

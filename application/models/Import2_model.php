@@ -634,13 +634,15 @@ class Import2_model extends CI_Model {
 	public function import2($form_id,$lang) {
 		$client = new Client(['base_uri' => 'https://www.formstack.com/api/v2/', 'query' => 'oauth_token=cbab05f58ecaf7b5c2f96aa483d0a05d']);
 		$response = $client->get('form/'.$form_id.'/submission');
-		$subm_index = [];
+		$subm_index = array();
 		$init = json_decode($response->getBody(), true);
 		for($i=1;$i<=$init['pages'];$i++) {
-			$response = $client->request('GET','form/'.$form_id.'/submission', ['page' => $i]);
+			$page = array();
+			$response = $client->request('GET','form/'.$form_id.'/submission', ['query' => 'oauth_token=cbab05f58ecaf7b5c2f96aa483d0a05d&page='.$i]);
 			$page = json_decode($response->getBody(), true);
 			foreach ($page['submissions'] as $p) {
 				array_push($subm_index,$p['id']);
+				
 			}
 		}
 		
@@ -659,8 +661,7 @@ class Import2_model extends CI_Model {
 				$this->db->insert('user', $user);
 				$user_id .= $this->db->insert_id();
 			}
-			$subm = array();
-			array_push($subm,'',$json['timestamp']);
+			$subm = array('',$json['timestamp']);
 			if ($subm_data['type']=='Communication') {
 				array_push($subm,slugify($subm_data['comm_title']),textHTML($subm_data['comm_title']),textHTML($subm_data['comm_description']),textHTML($subm_data['comm_lang']),textHTML($subm_data['comm_intro']),textHTML($subm_data['comm_theme']),textHTML($subm_data['comm_orientation']), 0, 0, 0, $user_id, '');
 				$this->db->insert('subm', associateSubm($subm,$lang));

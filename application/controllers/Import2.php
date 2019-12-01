@@ -32,7 +32,7 @@ class Import2 extends REST_Controller {
 	}
 	
 	public function import2_get() {
-		//Forms: FR: 3553260, AN: 3553261
+		//Forms: FR: 3553260, EN: 3553261
 		$r = $this->import2_model->import2(3553260,'fr');
 		$this->response($r);
 	}
