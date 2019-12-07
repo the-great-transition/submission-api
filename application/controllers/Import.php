@@ -32,8 +32,8 @@ class Import extends REST_Controller {
 	}
 	
 	public function import_get() {
-		//Forms: FR: 3553260, EN: 3553261
-		$r = $this->import_model->import(3553260,'fr');
+		//Forms: EN: 0/3553261, FR: 1/3553260
+		$r = $this->import_model->import(3553261,0);
 		$this->response($r);
 	}
 	

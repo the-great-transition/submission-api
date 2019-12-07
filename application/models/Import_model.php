@@ -26,7 +26,7 @@ function textHTML($string) {
 }
 
 function associateSubm($input,$lang) {
-	if ($lang == 'fr') {
+	if ($lang == 1) {
 		$reference_subm = array(
 			'subm_language' => array(
 				"Français" => 1,
@@ -51,7 +51,7 @@ function associateSubm($input,$lang) {
 				"Modèles" => 2
 			)
 		);
-	} else if ($lang == 'en') {
+	} else if ($lang == 0) {
 		$reference_subm = array(
 			'subm_language' => array(
 				"English" => 0,
@@ -120,7 +120,7 @@ function associatePart($input) {
 
 function toFieldName($id,$lang) {
 	$array = array(
-		'fr' => array(
+		1 => array(
 			81924959 => 'type',
 			81924968 => 'comm_title',
 			81924969 => 'comm_description',
@@ -372,7 +372,7 @@ function toFieldName($id,$lang) {
 			81925526 => 'email',
 			81925525 => 'name',
 			81925527 => 'info'
-		), 'en' => array(
+		), 0 => array(
 			81274174 => 'type',
 			81274539 => 'comm_title',
 			81274548 => 'comm_description',
@@ -658,7 +658,7 @@ class Import_model extends CI_Model {
 			if ($r = $query->result_array()) {
 				$user_id .= $r[0]['user_id'];
 			} else {
-				$user = array('user_id' => '','user_name' => $subm_data['name'],'user_email' => $subm_data['email'],'user_password' => '1A2B3C!','user_role' => 4,'user_meta' => '');
+				$user = array('user_id' => '','user_name' => $subm_data['name'],'user_email' => $subm_data['email'],'user_password' => '1A2B3C!','user_role' => 4,'user_language' => $lang,'user_meta' => '');
 				$this->db->insert('user', $user);
 				$user_id .= $this->db->insert_id();
 			}
