@@ -60,7 +60,8 @@ class Api extends REST_Controller {
 	
 	public function subm_get() {
 		$id = $this->uri->segment(3);
-		$r = $this->subm_model->read($id);
+		$params = $this->input->get();
+		$r = $this->subm_model->read($id,$params);
 		$this->response($r); 
 	}
 	

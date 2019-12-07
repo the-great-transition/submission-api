@@ -29,8 +29,8 @@ function associateSubm($input,$lang) {
 	if ($lang == 'fr') {
 		$reference_subm = array(
 			'subm_language' => array(
-				"Français" => 0,
-				"Anglais" => 1,
+				"Français" => 1,
+				"Anglais" => 0,
 				"Bilingue" => 2
 			),
 			'subm_level' => array(
