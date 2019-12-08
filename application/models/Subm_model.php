@@ -22,13 +22,56 @@ class Subm_model extends CI_Model {
 				$user = $query->result_array();
 				$user = array('user_name' => $user[0]['user_name'],'user_email' => $user[0]['user_email']);
 				$s = array_merge($a,$user);
-				array_push($array_appended, $s);
+				array_push($array_appended,$s);
 			}
 			return ($array_appended);
+		} else {
+			$query = $this->db->get_where($t,array($t.'_id' => $id));
+			$array = $query->result_array();
+			$subm = $array[0];
+			$query = $this->db->get_where('user',array('user_id' => $subm['user_id']));
+			$user = $query->result_array();
+			$user = array('user_name' => $user[0]['user_name'],'user_email' => $user[0]['user_email']);
+			$s = array_merge($subm,$user);
+			if ($subm['subm_type']==1 || $subm['subm_type']==2) {
+				$query = $this->db->get_where('part_subm',array($t.'_id' => $id, 'part_subm_type' => 1));
+				$array = $query->result_array();
+				$chair = $array[0];
+				$query = $this->db->get_where('part',array('part_id' => $chair['part_id']));
+				$array = $query->result_array();
+				$s['chair'] = $array[0];
+			}
+			$parts = [];
+			$comms = [];
+			if ($subm['subm_type']==1) {
+				$query = $this->db->get_where($t,array($t.'_forms' => $id));
+				$array = $query->result_array();
+				foreach ($array as $c) {
+					$p = [];
+					$query = $this->db->get_where('part_subm',array($t.'_id' => $c['subm_id'], 'part_subm_type' => 0));
+					$a = $query->result_array();
+					foreach ($a as $part) {
+						$query = $this->db->get_where('part',array('part_id' => $part['part_id']));
+						$r = $query->result_array();
+						array_push($p,$r[0]);
+					}
+					$cp = $c;
+					$cp['parts'] = $p;
+					array_push($comms,$cp);
+				}
+			} else {
+				$query = $this->db->get_where('part_subm',array($t.'_id' => $id, 'part_subm_type' => 0));
+				$array = $query->result_array();
+				foreach ($array as $p) {
+					$query = $this->db->get_where('part',array('part_id' => $p['part_id']));
+					$a = $query->result_array();
+					array_push($parts,$a[0]);
+				}
+			}
+			$s['parts'] = $parts;
+			$s['comms'] = $comms;
+			return ($s);
 		}
-		$query = $this->db->get_where($t,array($t.'_id' => $id));
-		return $query->result_array();
-		
 	}
 	
 }
