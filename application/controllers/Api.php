@@ -34,11 +34,11 @@ class Api extends REST_Controller {
 	
 	//User
 	
-	public function user_get() {
+	/*public function user_get() {
 		$id = $this->uri->segment(3);
 		$r = $this->user_model->read($id);
 		$this->response($r); 
-	}
+	}*/
 	
 	public function user_post() {
 		$id = $this->uri->segment(3);
