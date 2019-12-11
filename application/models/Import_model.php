@@ -633,78 +633,115 @@ function toFieldName($id,$lang) {
 class Import_model extends CI_Model {
 	
 	public function import($form_id,$lang) {
-		$client = new Client(['base_uri' => 'https://www.formstack.com/api/v2/', 'query' => 'oauth_token=cbab05f58ecaf7b5c2f96aa483d0a05d']);
-		
-		$response = $client->get('form/'.$form_id.'/submission');
-		$subm_index = array();
-		$init = json_decode($response->getBody(), true);
-		for($i=1;$i<=$init['pages'];$i++) {
-			$page = array();
-			$response = $client->request('GET','form/'.$form_id.'/submission', ['query' => 'oauth_token=cbab05f58ecaf7b5c2f96aa483d0a05d&page='.$i]);
-			$page = json_decode($response->getBody(), true);
-			foreach ($page['submissions'] as $p) {
-				array_push($subm_index,$p['id']);
-				
+		if ($form_id == 0) {
+			$this->db->from('subm');
+			$this->db->truncate();
+			$this->db->from('part');
+			$this->db->truncate();
+			$this->db->from('part_subm');
+			$this->db->truncate();
+			$this->db->from('user');
+			$this->db->truncate();
+			return 'DB emptied';
+		} else {
+			$client = new Client(['base_uri' => 'https://www.formstack.com/api/v2/', 'query' => 'oauth_token=cbab05f58ecaf7b5c2f96aa483d0a05d']);
+			
+			$response = $client->get('form/'.$form_id.'/submission');
+			$subm_index = array();
+			$init = json_decode($response->getBody(), true);
+			for($i=1;$i<=$init['pages'];$i++) {
+				$page = array();
+				$response = $client->request('GET','form/'.$form_id.'/submission', ['query' => 'oauth_token=cbab05f58ecaf7b5c2f96aa483d0a05d&page='.$i]);
+				$page = json_decode($response->getBody(), true);
+				foreach ($page['submissions'] as $p) {
+					array_push($subm_index,$p['id']);
+					
+				}
 			}
-		}
-		
-		for ($i=0;$i<$init['total'];$i++) {
-			$response = $client->get('submission/'.$subm_index[$i]);
-			$json = json_decode($response->getBody(), true);			$subm_data = array('type' => '','comm_title' => '','comm_description' => '','comm_lang' => '','comm_intro' => '','comm_theme' => '','comm_orientation' => '','comm_panelists' => '','comm_p1_fname' => '','comm_p1_lname' => '','comm_p1_pronoun' => '','comm_p1_email' => '','comm_p1_affiliation' => '','comm_p1_bio' => '','comm_p1_city' => '','comm_p1_country' => '','comm_p1_gender' => '','comm_p1_equity' => '','comm_p2_fname' => '','comm_p2_lname' => '','comm_p2_pronoun' => '','comm_p2_email' => '','comm_p2_affiliation' => '','comm_p2_bio' => '','comm_p2_city' => '','comm_p2_country' => '','comm_p2_gender' => '','comm_p2_equity' => '','comm_p3_fname' => '','comm_p3_lname' => '','comm_p3_pronoun' => '','comm_p3_email' => '','comm_p3_affiliation' => '','comm_p3_bio' => '','comm_p3_city' => '','comm_p3_country' => '','comm_p3_gender' => '','comm_p3_equity' => '','comm_p4_fname' => '','comm_p4_lname' => '','comm_p4_pronoun' => '','comm_p4_email' => '','comm_p4_affiliation' => '','comm_p4_bio' => '','comm_p4_city' => '','comm_p4_country' => '','comm_p4_gender' => '','comm_p4_equity' => '','panel_title' => '','panel_description' => '','panel_lang' => '','panel_intro' => '','panel_theme' => '','panel_orientation' => '','panel_comms' => '','panel_chair_fname' => '','panel_chair_lname' => '','panel_chair_email' => '','panel_c1_title' => '','panel_c1_description' => '','panel_c1_lang' => '','panel_c1_theme' => '','panel_c1_orientation' => '','panel_c1_panelists' => '','panel_c1_p1_fname' => '','panel_c1_p1_lname' => '','panel_c1_p1_pronoun' => '','panel_c1_p1_email' => '','panel_c1_p1_affiliation' => '','panel_c1_p1_bio' => '','panel_c1_p1_city' => '','panel_c1_p1_country' => '','panel_c1_p1_gender' => '','panel_c1_p1_equity' => '','panel_c1_p2_fname' => '','panel_c1_p2_lname' => '','panel_c1_p2_pronoun' => '','panel_c1_p2_email' => '','panel_c1_p2_affiliation' => '','panel_c1_p2_bio' => '','panel_c1_p2_city' => '','panel_c1_p2_country' => '','panel_c1_p2_gender' => '','panel_c1_p2_equity' => '','panel_c2_title' => '','panel_c2_description' => '','panel_c2_lang' => '','panel_c2_theme' => '','panel_c2_orientation' => '','panel_c2_panelists' => '','panel_c2_p1_fname' => '','panel_c2_p1_lname' => '','panel_c2_p1_pronoun' => '','panel_c2_p1_email' => '','panel_c2_p1_affiliation' => '','panel_c2_p1_bio' => '','panel_c2_p1_city' => '','panel_c2_p1_country' => '','panel_c2_p1_gender' => '','panel_c2_p1_equity' => '','panel_c2_p2_fname' => '','panel_c2_p2_lname' => '','panel_c2_p2_pronoun' => '','panel_c2_p2_email' => '','panel_c2_p2_affiliation' => '','panel_c2_p2_bio' => '','panel_c2_p2_city' => '','panel_c2_p2_country' => '','panel_c2_p2_gender' => '','panel_c2_p2_equity' => '','panel_c3_title' => '','panel_c3_description' => '','panel_c3_lang' => '','panel_c3_theme' => '','panel_c3_orientation' => '','panel_c3_panelists' => '','panel_c3_p1_fname' => '','panel_c3_p1_lname' => '','panel_c3_p1_pronoun' => '','panel_c3_p1_email' => '','panel_c3_p1_affiliation' => '','panel_c3_p1_bio' => '','panel_c3_p1_city' => '','panel_c3_p1_country' => '','panel_c3_p1_gender' => '','panel_c3_p1_equity' => '','panel_c3_p2_fname' => '','panel_c3_p2_lname' => '','panel_c3_p2_pronoun' => '','panel_c3_p2_email' => '','panel_c3_p2_affiliation' => '','panel_c3_p2_bio' => '','panel_c3_p2_city' => '','panel_c3_p2_country' => '','panel_c3_p2_gender' => '','panel_c3_p2_equity' => '','panel_c4_title' => '','panel_c4_description' => '','panel_c4_lang' => '','panel_c4_theme' => '','panel_c4_orientation' => '','panel_c4_panelists' => '','panel_c4_p1_fname' => '','panel_c4_p1_lname' => '','panel_c4_p1_pronoun' => '','panel_c4_p1_email' => '','panel_c4_p1_affiliation' => '','panel_c4_p1_bio' => '','panel_c4_p1_city' => '','panel_c4_p1_country' => '','panel_c4_p1_gender' => '','panel_c4_p1_equity' => '','panel_c4_p2_fname' => '','panel_c4_p2_lname' => '','panel_c4_p2_pronoun' => '','panel_c4_p2_email' => '','panel_c4_p2_affiliation' => '','panel_c4_p2_bio' => '','panel_c4_p2_city' => '','panel_c4_p2_country' => '','panel_c4_p2_gender' => '','panel_c4_p2_equity' => '','panel_c5_title' => '','panel_c5_description' => '','panel_c5_lang' => '','panel_c5_theme' => '','panel_c5_orientation' => '','panel_c5_panelists' => '','panel_c5_p1_fname' => '','panel_c5_p1_lname' => '','panel_c5_p1_pronoun' => '','panel_c5_p1_email' => '','panel_c5_p1_affiliation' => '','panel_c5_p1_bio' => '','panel_c5_p1_city' => '','panel_c5_p1_country' => '','panel_c5_p1_gender' => '','panel_c5_p1_equity' => '','panel_c5_p2_fname' => '','panel_c5_p2_lname' => '','panel_c5_p2_pronoun' => '','panel_c5_p2_email' => '','panel_c5_p2_affiliation' => '','panel_c5_p2_bio' => '','panel_c5_p2_city' => '','panel_c5_p2_country' => '','panel_c5_p2_gender' => '','panel_c5_p2_equity' => '','workshop_title' => '','workshop_description' => '','workshop_lang' => '','workshop_intro' => '','workshop_theme' => '','workshop_orientation' => '','workshop_panelists' => '','workshop_chair_fname' => '','workshop_chair_lname' => '','workshop_chair_email' => '','workshop_p1_fname' => '','workshop_p1_lname' => '','workshop_p1_pronoun' => '','workshop_p1_email' => '','workshop_p1_affiliation' => '','workshop_p1_bio' => '','workshop_p1_city' => '','workshop_p1_country' => '','workshop_p1_gender' => '','workshop_p1_equity' => '','workshop_p2_fname' => '','workshop_p2_lname' => '','workshop_p2_pronoun' => '','workshop_p2_email' => '','workshop_p2_affiliation' => '','workshop_p2_bio' => '','workshop_p2_city' => '','workshop_p2_country' => '','workshop_p2_gender' => '','workshop_p2_equity' => '','workshop_p3_fname' => '','workshop_p3_lname' => '','workshop_p3_pronoun' => '','workshop_p3_email' => '','workshop_p3_affiliation' => '','workshop_p3_bio' => '','workshop_p3_city' => '','workshop_p3_country' => '','workshop_p3_gender' => '','workshop_p3_equity' => '','workshop_p4_fname' => '','workshop_p4_lname' => '','workshop_p4_pronoun' => '','workshop_p4_email' => '','workshop_p4_affiliation' => '','workshop_p4_bio' => '','workshop_p4_city' => '','workshop_p4_country' => '','workshop_p4_gender' => '','workshop_p4_equity' => '','workshop_p5_fname' => '','workshop_p5_lname' => '','workshop_p5_pronoun' => '','workshop_p5_email' => '','workshop_p5_affiliation' => '','workshop_p5_bio' => '','workshop_p5_city' => '','workshop_p5_country' => '','workshop_p5_gender' => '','workshop_p5_equity' => '','email' => '','name' => '','info' => '');
-			foreach ($json['data'] as $s) {
-				$subm_data[toFieldName($s['field'],$lang)] = $s['value'];
-			}
-			$user_id = '';
-			$query = $this->db->get_where('user', array('user_email' => $subm_data['email']));
-			if ($r = $query->result_array()) {
-				$user_id .= $r[0]['user_id'];
-			} else {
-				$user = array('user_id' => '','user_name' => $subm_data['name'],'user_email' => $subm_data['email'],'user_password' => '1A2B3C!','user_role' => 4,'user_language' => $lang,'user_meta' => '');
-				$this->db->insert('user', $user);
-				$user_id .= $this->db->insert_id();
-			}
-			$subm = array('',$json['timestamp']);
-			if ($subm_data['type']=='Communication') {
-				array_push($subm,slugify($subm_data['comm_title']),textHTML($subm_data['comm_title']),textHTML($subm_data['comm_description']),textHTML($subm_data['comm_lang']),textHTML($subm_data['comm_intro']),textHTML($subm_data['comm_theme']),textHTML($subm_data['comm_orientation']),0,0,0,textHTML($subm_data['info']),$user_id,'');
-				$this->db->insert('subm', associateSubm($subm,$lang));
-				$subm_id = '';
-				$subm_id .= $this->db->insert_id();
-				for ($x=1; $x<=$subm_data['comm_panelists']; $x++) {
-					$p = 'comm_p'.$x.'_';
+			
+			for ($i=0;$i<$init['total'];$i++) {
+				$response = $client->get('submission/'.$subm_index[$i]);
+				$json = json_decode($response->getBody(), true);				$subm_data = array('type' => '','comm_title' => '','comm_description' => '','comm_lang' => '','comm_intro' => '','comm_theme' => '','comm_orientation' => '','comm_panelists' => '','comm_p1_fname' => '','comm_p1_lname' => '','comm_p1_pronoun' => '','comm_p1_email' => '','comm_p1_affiliation' => '','comm_p1_bio' => '','comm_p1_city' => '','comm_p1_country' => '','comm_p1_gender' => '','comm_p1_equity' => '','comm_p2_fname' => '','comm_p2_lname' => '','comm_p2_pronoun' => '','comm_p2_email' => '','comm_p2_affiliation' => '','comm_p2_bio' => '','comm_p2_city' => '','comm_p2_country' => '','comm_p2_gender' => '','comm_p2_equity' => '','comm_p3_fname' => '','comm_p3_lname' => '','comm_p3_pronoun' => '','comm_p3_email' => '','comm_p3_affiliation' => '','comm_p3_bio' => '','comm_p3_city' => '','comm_p3_country' => '','comm_p3_gender' => '','comm_p3_equity' => '','comm_p4_fname' => '','comm_p4_lname' => '','comm_p4_pronoun' => '','comm_p4_email' => '','comm_p4_affiliation' => '','comm_p4_bio' => '','comm_p4_city' => '','comm_p4_country' => '','comm_p4_gender' => '','comm_p4_equity' => '','panel_title' => '','panel_description' => '','panel_lang' => '','panel_intro' => '','panel_theme' => '','panel_orientation' => '','panel_comms' => '','panel_chair_fname' => '','panel_chair_lname' => '','panel_chair_email' => '','panel_c1_title' => '','panel_c1_description' => '','panel_c1_lang' => '','panel_c1_theme' => '','panel_c1_orientation' => '','panel_c1_panelists' => '','panel_c1_p1_fname' => '','panel_c1_p1_lname' => '','panel_c1_p1_pronoun' => '','panel_c1_p1_email' => '','panel_c1_p1_affiliation' => '','panel_c1_p1_bio' => '','panel_c1_p1_city' => '','panel_c1_p1_country' => '','panel_c1_p1_gender' => '','panel_c1_p1_equity' => '','panel_c1_p2_fname' => '','panel_c1_p2_lname' => '','panel_c1_p2_pronoun' => '','panel_c1_p2_email' => '','panel_c1_p2_affiliation' => '','panel_c1_p2_bio' => '','panel_c1_p2_city' => '','panel_c1_p2_country' => '','panel_c1_p2_gender' => '','panel_c1_p2_equity' => '','panel_c2_title' => '','panel_c2_description' => '','panel_c2_lang' => '','panel_c2_theme' => '','panel_c2_orientation' => '','panel_c2_panelists' => '','panel_c2_p1_fname' => '','panel_c2_p1_lname' => '','panel_c2_p1_pronoun' => '','panel_c2_p1_email' => '','panel_c2_p1_affiliation' => '','panel_c2_p1_bio' => '','panel_c2_p1_city' => '','panel_c2_p1_country' => '','panel_c2_p1_gender' => '','panel_c2_p1_equity' => '','panel_c2_p2_fname' => '','panel_c2_p2_lname' => '','panel_c2_p2_pronoun' => '','panel_c2_p2_email' => '','panel_c2_p2_affiliation' => '','panel_c2_p2_bio' => '','panel_c2_p2_city' => '','panel_c2_p2_country' => '','panel_c2_p2_gender' => '','panel_c2_p2_equity' => '','panel_c3_title' => '','panel_c3_description' => '','panel_c3_lang' => '','panel_c3_theme' => '','panel_c3_orientation' => '','panel_c3_panelists' => '','panel_c3_p1_fname' => '','panel_c3_p1_lname' => '','panel_c3_p1_pronoun' => '','panel_c3_p1_email' => '','panel_c3_p1_affiliation' => '','panel_c3_p1_bio' => '','panel_c3_p1_city' => '','panel_c3_p1_country' => '','panel_c3_p1_gender' => '','panel_c3_p1_equity' => '','panel_c3_p2_fname' => '','panel_c3_p2_lname' => '','panel_c3_p2_pronoun' => '','panel_c3_p2_email' => '','panel_c3_p2_affiliation' => '','panel_c3_p2_bio' => '','panel_c3_p2_city' => '','panel_c3_p2_country' => '','panel_c3_p2_gender' => '','panel_c3_p2_equity' => '','panel_c4_title' => '','panel_c4_description' => '','panel_c4_lang' => '','panel_c4_theme' => '','panel_c4_orientation' => '','panel_c4_panelists' => '','panel_c4_p1_fname' => '','panel_c4_p1_lname' => '','panel_c4_p1_pronoun' => '','panel_c4_p1_email' => '','panel_c4_p1_affiliation' => '','panel_c4_p1_bio' => '','panel_c4_p1_city' => '','panel_c4_p1_country' => '','panel_c4_p1_gender' => '','panel_c4_p1_equity' => '','panel_c4_p2_fname' => '','panel_c4_p2_lname' => '','panel_c4_p2_pronoun' => '','panel_c4_p2_email' => '','panel_c4_p2_affiliation' => '','panel_c4_p2_bio' => '','panel_c4_p2_city' => '','panel_c4_p2_country' => '','panel_c4_p2_gender' => '','panel_c4_p2_equity' => '','panel_c5_title' => '','panel_c5_description' => '','panel_c5_lang' => '','panel_c5_theme' => '','panel_c5_orientation' => '','panel_c5_panelists' => '','panel_c5_p1_fname' => '','panel_c5_p1_lname' => '','panel_c5_p1_pronoun' => '','panel_c5_p1_email' => '','panel_c5_p1_affiliation' => '','panel_c5_p1_bio' => '','panel_c5_p1_city' => '','panel_c5_p1_country' => '','panel_c5_p1_gender' => '','panel_c5_p1_equity' => '','panel_c5_p2_fname' => '','panel_c5_p2_lname' => '','panel_c5_p2_pronoun' => '','panel_c5_p2_email' => '','panel_c5_p2_affiliation' => '','panel_c5_p2_bio' => '','panel_c5_p2_city' => '','panel_c5_p2_country' => '','panel_c5_p2_gender' => '','panel_c5_p2_equity' => '','workshop_title' => '','workshop_description' => '','workshop_lang' => '','workshop_intro' => '','workshop_theme' => '','workshop_orientation' => '','workshop_panelists' => '','workshop_chair_fname' => '','workshop_chair_lname' => '','workshop_chair_email' => '','workshop_p1_fname' => '','workshop_p1_lname' => '','workshop_p1_pronoun' => '','workshop_p1_email' => '','workshop_p1_affiliation' => '','workshop_p1_bio' => '','workshop_p1_city' => '','workshop_p1_country' => '','workshop_p1_gender' => '','workshop_p1_equity' => '','workshop_p2_fname' => '','workshop_p2_lname' => '','workshop_p2_pronoun' => '','workshop_p2_email' => '','workshop_p2_affiliation' => '','workshop_p2_bio' => '','workshop_p2_city' => '','workshop_p2_country' => '','workshop_p2_gender' => '','workshop_p2_equity' => '','workshop_p3_fname' => '','workshop_p3_lname' => '','workshop_p3_pronoun' => '','workshop_p3_email' => '','workshop_p3_affiliation' => '','workshop_p3_bio' => '','workshop_p3_city' => '','workshop_p3_country' => '','workshop_p3_gender' => '','workshop_p3_equity' => '','workshop_p4_fname' => '','workshop_p4_lname' => '','workshop_p4_pronoun' => '','workshop_p4_email' => '','workshop_p4_affiliation' => '','workshop_p4_bio' => '','workshop_p4_city' => '','workshop_p4_country' => '','workshop_p4_gender' => '','workshop_p4_equity' => '','workshop_p5_fname' => '','workshop_p5_lname' => '','workshop_p5_pronoun' => '','workshop_p5_email' => '','workshop_p5_affiliation' => '','workshop_p5_bio' => '','workshop_p5_city' => '','workshop_p5_country' => '','workshop_p5_gender' => '','workshop_p5_equity' => '','email' => '','name' => '','info' => '');
+				foreach ($json['data'] as $s) {
+					$subm_data[toFieldName($s['field'],$lang)] = $s['value'];
+				}
+				$user_id = '';
+				$query = $this->db->get_where('user', array('user_email' => $subm_data['email']));
+				if ($r = $query->result_array()) {
+					$user_id .= $r[0]['user_id'];
+				} else {
+					$user = array('user_id' => '','user_name' => $subm_data['name'],'user_email' => $subm_data['email'],'user_password' => '1A2B3C!','user_role' => 4,'user_language' => $lang,'user_meta' => '');
+					$this->db->insert('user', $user);
+					$user_id .= $this->db->insert_id();
+				}
+				$subm = array('',$json['timestamp']);
+				if ($subm_data['type']=='Communication') {
+					array_push($subm,slugify($subm_data['comm_title']),textHTML($subm_data['comm_title']),textHTML($subm_data['comm_description']),textHTML($subm_data['comm_lang']),textHTML($subm_data['comm_intro']),textHTML($subm_data['comm_theme']),textHTML($subm_data['comm_orientation']),0,0,0,textHTML($subm_data['info']),$user_id,'');
+					$this->db->insert('subm', associateSubm($subm,$lang));
+					$subm_id = '';
+					$subm_id .= $this->db->insert_id();
+					for ($x=1; $x<=$subm_data['comm_panelists']; $x++) {
+						$p = 'comm_p'.$x.'_';
+						$part = array('');
+						$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_data[$p.'city'];
+						array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']), $user_id, $subm_id, '');
+						$this->db->insert('part', associatePart($part));
+						$part_id = '';
+						$part_id .= $this->db->insert_id();
+						$part_subm = array('part_id' => $part_id, 'subm_id' => $subm_id, 'part_subm_type' => 0);
+						$this->db->insert('part_subm', $part_subm);
+					}
+				} else if ($subm_data['type']=='Panel (ou séminaire)' || $subm_data['type']=='Panel (or Seminar)') {
+					array_push($subm,slugify($subm_data['panel_title']),textHTML($subm_data['panel_title']),textHTML($subm_data['panel_description']),textHTML($subm_data['panel_lang']),textHTML($subm_data['panel_intro']),textHTML($subm_data['panel_theme']),textHTML($subm_data['panel_orientation']),1,0,0,textHTML($subm_data['info']),$user_id, '');
+					$this->db->insert('subm', associateSubm($subm,$lang));
+					$panel_id = '';
+					$panel_id .= $this->db->insert_id();
+					$p = 'panel_chair_';
 					$part = array('');
-					$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_data[$p.'city'];
-					array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']), $user_id, $subm_id, '');
+					$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$panel_id;
+					array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),'',textHTML($subm_data[$p.'email']),'','','','','','',$user_id,$panel_id,'');
 					$this->db->insert('part', associatePart($part));
 					$part_id = '';
 					$part_id .= $this->db->insert_id();
-					$part_subm = array('part_id' => $part_id, 'subm_id' => $subm_id, 'part_subm_type' => 0);
+					$part_subm = array('part_id' => $part_id, 'subm_id' => $panel_id, 'part_subm_type' => 1);
 					$this->db->insert('part_subm', $part_subm);
-				}
-			} else if ($subm_data['type']=='Panel (ou séminaire)' || $subm_data['type']=='Panel (or Seminar)') {
-				array_push($subm,slugify($subm_data['panel_title']),textHTML($subm_data['panel_title']),textHTML($subm_data['panel_description']),textHTML($subm_data['panel_lang']),textHTML($subm_data['panel_intro']),textHTML($subm_data['panel_theme']),textHTML($subm_data['panel_orientation']),1,0,0,textHTML($subm_data['info']),$user_id, '');
-				$this->db->insert('subm', associateSubm($subm,$lang));
-				$panel_id = '';
-				$panel_id .= $this->db->insert_id();
-				$p = 'panel_chair_';
-				$part = array('');
-				$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$panel_id;
-				array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),'',textHTML($subm_data[$p.'email']),'','','','','','',$user_id,$panel_id,'');
-				$this->db->insert('part', associatePart($part));
-				$part_id = '';
-				$part_id .= $this->db->insert_id();
-				$part_subm = array('part_id' => $part_id, 'subm_id' => $panel_id, 'part_subm_type' => 1);
-				$this->db->insert('part_subm', $part_subm);
-				for ($y=1;$y<=$subm_data['panel_comms'];$y++) {
-					$c = 'panel_c'.$y.'_';
-					$comm = array('',$json['timestamp'],slugify($subm_data[$c.'title']),textHTML($subm_data[$c.'title']),textHTML($subm_data[$c.'description']),textHTML($subm_data[$c.'lang']),'NA',textHTML($subm_data[$c.'theme']),textHTML($subm_data[$c.'orientation']),0,0,$panel_id,textHTML($subm_data['info']),$user_id,'');
-					$this->db->insert('subm', associateSubm($comm,$lang));
+					for ($y=1;$y<=$subm_data['panel_comms'];$y++) {
+						$c = 'panel_c'.$y.'_';
+						$comm = array('',$json['timestamp'],slugify($subm_data[$c.'title']),textHTML($subm_data[$c.'title']),textHTML($subm_data[$c.'description']),textHTML($subm_data[$c.'lang']),'NA',textHTML($subm_data[$c.'theme']),textHTML($subm_data[$c.'orientation']),0,0,$panel_id,textHTML($subm_data['info']),$user_id,'');
+						$this->db->insert('subm', associateSubm($comm,$lang));
+						$subm_id = '';
+						$subm_id .= $this->db->insert_id();
+						for ($x=1; $x<=$subm_data[$c.'panelists']; $x++) {
+							$p = 'panel_c'.$y.'_p'.$x.'_';
+							$part = array('');
+							$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_data[$p.'city'];
+							array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']),$user_id, $subm_id, '');
+							$this->db->insert('part', associatePart($part));
+							$part_id = '';
+							$part_id .= $this->db->insert_id();
+							$part_subm = array('part_id' => $part_id, 'subm_id' => $subm_id, 'part_subm_type' => 0);
+							$this->db->insert('part_subm', $part_subm);
+						}
+					}
+				} else if ($subm_data['type']=='Table ronde (ou atelier)' || $subm_data['type']=='Round Table (or Workshop)') {
+					array_push($subm,slugify($subm_data['workshop_title']),textHTML($subm_data['workshop_title']),textHTML($subm_data['workshop_description']),textHTML($subm_data['workshop_lang']),textHTML($subm_data['workshop_intro']),textHTML($subm_data['workshop_theme']),textHTML($subm_data['workshop_orientation']),2,0,0,textHTML($subm_data['info']),$user_id,'');
+					$this->db->insert('subm', associateSubm($subm,$lang));
 					$subm_id = '';
 					$subm_id .= $this->db->insert_id();
-					for ($x=1; $x<=$subm_data[$c.'panelists']; $x++) {
-						$p = 'panel_c'.$y.'_p'.$x.'_';
+					$p = 'workshop_chair_';
+					$part = array('');
+					$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_id;
+					array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),'',textHTML($subm_data[$p.'email']),'','','','','','',$user_id,$subm_id,'');
+					$this->db->insert('part', associatePart($part));
+					$part_id = '';
+					$part_id .= $this->db->insert_id();
+					$part_subm = array('part_id' => $part_id, 'subm_id' => $subm_id, 'part_subm_type' => 1);
+					$this->db->insert('part_subm', $part_subm);
+					for ($x=1; $x<=$subm_data['workshop_panelists']; $x++) {
+						$p = 'workshop_p'.$x.'_';
 						$part = array('');
 						$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_data[$p.'city'];
-						array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']),$user_id, $subm_id, '');
+						array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']), $user_id, $subm_id, '');
 						$this->db->insert('part', associatePart($part));
 						$part_id = '';
 						$part_id .= $this->db->insert_id();
@@ -712,33 +749,8 @@ class Import_model extends CI_Model {
 						$this->db->insert('part_subm', $part_subm);
 					}
 				}
-			} else if ($subm_data['type']=='Table ronde (ou atelier)' || $subm_data['type']=='Round Table (or Workshop)') {
-				array_push($subm,slugify($subm_data['workshop_title']),textHTML($subm_data['workshop_title']),textHTML($subm_data['workshop_description']),textHTML($subm_data['workshop_lang']),textHTML($subm_data['workshop_intro']),textHTML($subm_data['workshop_theme']),textHTML($subm_data['workshop_orientation']),2,0,0,textHTML($subm_data['info']),$user_id,'');
-				$this->db->insert('subm', associateSubm($subm,$lang));
-				$subm_id = '';
-				$subm_id .= $this->db->insert_id();
-				$p = 'workshop_chair_';
-				$part = array('');
-				$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_id;
-				array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),'',textHTML($subm_data[$p.'email']),'','','','','','',$user_id,$subm_id,'');
-				$this->db->insert('part', associatePart($part));
-				$part_id = '';
-				$part_id .= $this->db->insert_id();
-				$part_subm = array('part_id' => $part_id, 'subm_id' => $subm_id, 'part_subm_type' => 1);
-				$this->db->insert('part_subm', $part_subm);
-				for ($x=1; $x<=$subm_data['workshop_panelists']; $x++) {
-					$p = 'workshop_p'.$x.'_';
-					$part = array('');
-					$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_data[$p.'city'];
-					array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']), $user_id, $subm_id, '');
-					$this->db->insert('part', associatePart($part));
-					$part_id = '';
-					$part_id .= $this->db->insert_id();
-					$part_subm = array('part_id' => $part_id, 'subm_id' => $subm_id, 'part_subm_type' => 0);
-					$this->db->insert('part_subm', $part_subm);
-				}
 			}
+			return 'Done';
 		}
-		return 'Done';
 	}
 }

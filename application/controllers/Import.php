@@ -33,7 +33,14 @@ class Import extends REST_Controller {
 	
 	public function import_get() {
 		//Forms: EN: 0/3553261, FR: 1/3553260
-		$r = $this->import_model->import(3553261,0);
+		$id = $this->uri->segment(3);
+		if ($id == 3553260) {
+			$r = $this->import_model->import($id,1);
+		} else if ($id == 3553261) {
+			$r = $this->import_model->import($id,0);
+		} else {
+			$r = $this->import_model->import(0,-1);
+		}
 		$this->response($r);
 	}
 	
