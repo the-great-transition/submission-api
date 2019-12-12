@@ -670,7 +670,7 @@ class Import_model extends CI_Model {
 				if ($r = $query->result_array()) {
 					$user_id .= $r[0]['user_id'];
 				} else {
-					$user = array('user_id' => '','user_name' => $subm_data['name'],'user_email' => $subm_data['email'],'user_password' => '1A2B3C!','user_role' => 4,'user_language' => $lang,'user_meta' => '');
+					$user = array('user_id' => '','user_name' => $subm_data['name'],'user_email' => $subm_data['email'],'user_password' => '1A2B3C!','user_role' => 4,'user_language' => $lang,'user_meta' => $json['id']);
 					$this->db->insert('user', $user);
 					$user_id .= $this->db->insert_id();
 				}

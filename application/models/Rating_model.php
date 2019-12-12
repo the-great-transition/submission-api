@@ -17,7 +17,9 @@ class Rating_model extends CI_Model {
 				array_push($output,array('user_id' => $r[0]['user_id'],'user_name' => $r[0]['user_name'],'subm_rating' => $a['user_subm_rating']));
 				$output['average'] += $a['user_subm_rating'];
 			}
-			$output['average'] /= sizeof($array);
+			if (sizeof($array)>0) {
+				$output['average'] /= sizeof($array);
+			}
 			return $output;
 		}
 	}
@@ -40,7 +42,9 @@ class Rating_model extends CI_Model {
 						array_push($output,array('user_id' => $r[0]['user_id'],'user_name' => $r[0]['user_name'],'subm_rating' => $a['user_subm_rating']));
 						$output['average'] += $a['user_subm_rating'];
 					}
-					$output['average'] /= sizeof($array);
+					if (sizeof($array)>0) {
+						$output['average'] /= sizeof($array);
+					}
 					return $output;
 				} else {
 					return 'Error inserting data';
@@ -56,7 +60,9 @@ class Rating_model extends CI_Model {
 					array_push($output,array('user_id' => $r[0]['user_id'],'user_name' => $r[0]['user_name'],'subm_rating' => $a['user_subm_rating']));
 					$output['average'] += $a['user_subm_rating'];
 				}
-				$output['average'] /= sizeof($array);
+				if (sizeof($array)>0) {
+					$output['average'] /= sizeof($array);
+				}
 				return $output;
 			}
 		}

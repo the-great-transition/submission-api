@@ -22,6 +22,8 @@ class Subm_model extends CI_Model {
 				$user = $query->result_array();
 				$user = array('user_name' => $user[0]['user_name'],'user_email' => $user[0]['user_email']);
 				$s = array_merge($a,$user);
+				$a['id'] = $a[$t.'_id'];
+				$a['value'] = $a[$t.'_title'];
 				array_push($array_appended,$s);
 			}
 			return ($array_appended);
@@ -70,6 +72,12 @@ class Subm_model extends CI_Model {
 			}
 			$s['parts'] = $parts;
 			$s['comms'] = $comms;
+			$s['rating'] = '';
+			$query = $this->db->get_where('user_subm',array($t.'_id' => $id, 'user_id' => $data['user_id']));
+			$array = $query->result_array();
+			if (sizeof($array)==1) {
+				$s['rating'] = $array[0]['user_subm_rating'];
+			}
 			return ($s);
 		}
 	}

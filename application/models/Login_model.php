@@ -11,12 +11,12 @@ class Login_model extends CI_Model {
 			//Need to hash passwords
 			if ($input['password'] === $r[0]['user_password']) {
 				//Set session
-				return 'success';
+				return array('response' => 'success', 'id' => $r[0]['user_id'], 'role' => $r[0]['user_role']);
 			} else {
-				return 'err_password';
+				return array('response' => 'err_password');
 			}
 		} else {
-			return 'err_email';
+			return array('response' => 'err_email');
 		}
 	}
 	
