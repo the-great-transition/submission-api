@@ -676,7 +676,7 @@ class Import_model extends CI_Model {
 				}
 				$subm = array('',$json['timestamp']);
 				if ($subm_data['type']=='Communication') {
-					array_push($subm,slugify($subm_data['comm_title']),textHTML($subm_data['comm_title']),textHTML($subm_data['comm_description']),textHTML($subm_data['comm_lang']),textHTML($subm_data['comm_intro']),textHTML($subm_data['comm_theme']),textHTML($subm_data['comm_orientation']),0,0,0,textHTML($subm_data['info']),$user_id,'');
+					array_push($subm,slugify($subm_data['comm_title']),textHTML($subm_data['comm_title']),textHTML($subm_data['comm_description']),textHTML($subm_data['comm_lang']),textHTML($subm_data['comm_intro']),textHTML($subm_data['comm_theme']),textHTML($subm_data['comm_orientation']),0,0,0,textHTML($subm_data['info']),$user_id,$json['id']);
 					$this->db->insert('subm', associateSubm($subm,$lang));
 					$subm_id = '';
 					$subm_id .= $this->db->insert_id();
@@ -684,7 +684,7 @@ class Import_model extends CI_Model {
 						$p = 'comm_p'.$x.'_';
 						$part = array('');
 						$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_data[$p.'city'];
-						array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']), $user_id, $subm_id, '');
+						array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']), $user_id, $subm_id, $json['id']);
 						$this->db->insert('part', associatePart($part));
 						$part_id = '';
 						$part_id .= $this->db->insert_id();
@@ -692,14 +692,14 @@ class Import_model extends CI_Model {
 						$this->db->insert('part_subm', $part_subm);
 					}
 				} else if ($subm_data['type']=='Panel (ou séminaire)' || $subm_data['type']=='Panel (or Seminar)') {
-					array_push($subm,slugify($subm_data['panel_title']),textHTML($subm_data['panel_title']),textHTML($subm_data['panel_description']),textHTML($subm_data['panel_lang']),textHTML($subm_data['panel_intro']),textHTML($subm_data['panel_theme']),textHTML($subm_data['panel_orientation']),1,0,0,textHTML($subm_data['info']),$user_id, '');
+					array_push($subm,slugify($subm_data['panel_title']),textHTML($subm_data['panel_title']),textHTML($subm_data['panel_description']),textHTML($subm_data['panel_lang']),textHTML($subm_data['panel_intro']),textHTML($subm_data['panel_theme']),textHTML($subm_data['panel_orientation']),1,0,0,textHTML($subm_data['info']),$user_id, $json['id']);
 					$this->db->insert('subm', associateSubm($subm,$lang));
 					$panel_id = '';
 					$panel_id .= $this->db->insert_id();
 					$p = 'panel_chair_';
 					$part = array('');
 					$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$panel_id;
-					array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),'',textHTML($subm_data[$p.'email']),'','','','','','',$user_id,$panel_id,'');
+					array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),'',textHTML($subm_data[$p.'email']),'','','','','','',$user_id,$panel_id,$json['id']);
 					$this->db->insert('part', associatePart($part));
 					$part_id = '';
 					$part_id .= $this->db->insert_id();
@@ -707,7 +707,7 @@ class Import_model extends CI_Model {
 					$this->db->insert('part_subm', $part_subm);
 					for ($y=1;$y<=$subm_data['panel_comms'];$y++) {
 						$c = 'panel_c'.$y.'_';
-						$comm = array('',$json['timestamp'],slugify($subm_data[$c.'title']),textHTML($subm_data[$c.'title']),textHTML($subm_data[$c.'description']),textHTML($subm_data[$c.'lang']),'NA',textHTML($subm_data[$c.'theme']),textHTML($subm_data[$c.'orientation']),0,0,$panel_id,textHTML($subm_data['info']),$user_id,'');
+						$comm = array('',$json['timestamp'],slugify($subm_data[$c.'title']),textHTML($subm_data[$c.'title']),textHTML($subm_data[$c.'description']),textHTML($subm_data[$c.'lang']),'NA',textHTML($subm_data[$c.'theme']),textHTML($subm_data[$c.'orientation']),0,0,$panel_id,textHTML($subm_data['info']),$user_id,$json['id']);
 						$this->db->insert('subm', associateSubm($comm,$lang));
 						$subm_id = '';
 						$subm_id .= $this->db->insert_id();
@@ -715,7 +715,7 @@ class Import_model extends CI_Model {
 							$p = 'panel_c'.$y.'_p'.$x.'_';
 							$part = array('');
 							$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_data[$p.'city'];
-							array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']),$user_id, $subm_id, '');
+							array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']),$user_id, $subm_id, $json['id']);
 							$this->db->insert('part', associatePart($part));
 							$part_id = '';
 							$part_id .= $this->db->insert_id();
@@ -724,14 +724,14 @@ class Import_model extends CI_Model {
 						}
 					}
 				} else if ($subm_data['type']=='Table ronde (ou atelier)' || $subm_data['type']=='Round Table (or Workshop)') {
-					array_push($subm,slugify($subm_data['workshop_title']),textHTML($subm_data['workshop_title']),textHTML($subm_data['workshop_description']),textHTML($subm_data['workshop_lang']),textHTML($subm_data['workshop_intro']),textHTML($subm_data['workshop_theme']),textHTML($subm_data['workshop_orientation']),2,0,0,textHTML($subm_data['info']),$user_id,'');
+					array_push($subm,slugify($subm_data['workshop_title']),textHTML($subm_data['workshop_title']),textHTML($subm_data['workshop_description']),textHTML($subm_data['workshop_lang']),textHTML($subm_data['workshop_intro']),textHTML($subm_data['workshop_theme']),textHTML($subm_data['workshop_orientation']),2,0,0,textHTML($subm_data['info']),$user_id,$json['id']);
 					$this->db->insert('subm', associateSubm($subm,$lang));
 					$subm_id = '';
 					$subm_id .= $this->db->insert_id();
 					$p = 'workshop_chair_';
 					$part = array('');
 					$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_id;
-					array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),'',textHTML($subm_data[$p.'email']),'','','','','','',$user_id,$subm_id,'');
+					array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),'',textHTML($subm_data[$p.'email']),'','','','','','',$user_id,$subm_id,$json['id']);
 					$this->db->insert('part', associatePart($part));
 					$part_id = '';
 					$part_id .= $this->db->insert_id();
@@ -741,7 +741,7 @@ class Import_model extends CI_Model {
 						$p = 'workshop_p'.$x.'_';
 						$part = array('');
 						$pslug = $subm_data[$p.'fname'].' '.$subm_data[$p.'lname'].' '.$subm_data[$p.'city'];
-						array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']), $user_id, $subm_id, '');
+						array_push($part,slugify($pslug),textHTML($subm_data[$p.'fname']),textHTML($subm_data[$p.'lname']),textHTML($subm_data[$p.'pronoun']),textHTML($subm_data[$p.'email']),textHTML($subm_data[$p.'affiliation']),textHTML($subm_data[$p.'bio']),textHTML($subm_data[$p.'city']),textHTML($subm_data[$p.'country']),textHTML($subm_data[$p.'gender']),textHTML($subm_data[$p.'equity']), $user_id, $subm_id, $json['id']);
 						$this->db->insert('part', associatePart($part));
 						$part_id = '';
 						$part_id .= $this->db->insert_id();

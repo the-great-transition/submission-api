@@ -16,9 +16,9 @@ class User_model extends CI_Model {
 	public function insert($input,$id) {
 		$t = 'user';
 		$data = array($t.'_name' => $input['name'],
-		$t.'_email' => $input['email'],
-		$t.'_password' => $input['password'],
-		$t.'_role' => $input['role']);
+			$t.'_email' => $input['email'],
+			$t.'_password' => $input['password'],
+			$t.'_role' => $input['role']);
 		if ($id === null) {
 			if ($this->db->insert($t,$data)) {
 				return 'Data inserted successfully';
