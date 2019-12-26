@@ -6,7 +6,7 @@ class Subm_model extends CI_Model {
 	public function read($id,$data) {
 		$t = 'subm';
 		if ($id === null) {
-			$this->db->order_by('subm_time', 'ASC');
+			//$this->db->order_by('subm_time', 'ASC');
 			if ($data['language']!=-1) { $this->db->where($t.'_language', $data['language']); };
 			if ($data['level']!=-1) { $this->db->where($t.'_level', $data['level']); };
 			if ($data['theme']!=-1) { $this->db->where($t.'_theme', $data['theme']); };
