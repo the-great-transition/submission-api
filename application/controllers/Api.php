@@ -109,8 +109,7 @@ class Api extends REST_Controller
     public function subm_get()
     {
         $id = $this->uri->segment(3);
-        $params = $this->input->get();
-        $r = $this->subm_model->read($id, $params);
+        $r = $this->subm_model->read($id);
         $this->response($r);
     }
 
@@ -127,8 +126,8 @@ class Api extends REST_Controller
     {
         $id = $this->uri->segment(3);
         $post = json_decode(file_get_contents('php://input'), true);
-        $data = array('user_id' => $post['data']['user_id'],
-            'rating' => $post['data']['rating']);
+        $data = array('user_id' => $post['id'],
+            'rating' => $post['rating']);
         $r = $this->rating_model->rate($data, $id);
         $this->response($r);
     }
@@ -146,8 +145,7 @@ class Api extends REST_Controller
     {
         $id = $this->uri->segment(3);
         $post = json_decode(file_get_contents('php://input'), true);
-        $data = array('user_id' => $post['data']['user_id'],
-            'comment' => $post['data']['comment']);
+        $data = array('comment' => $post['comment']);
         $r = $this->comment_model->insert($data, $id);
         $this->response($r);
     }

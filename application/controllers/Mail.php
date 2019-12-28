@@ -29,7 +29,7 @@ class Mail extends REST_Controller
     public function send_post()
     {
         $post = json_decode(file_get_contents('php://input'), true);
-        $data = array("user" => $post["user"], "from" => $post["from"], "from_name" => $post["from_name"], "to" => $post["to"], "subject" => $post["subject"], "message" => $post["message"]);
+        $data = array("from_name" => $post["from_name"], "reply_to" => $post["reply_to"], "reply_to_name" => $post["reply_to_name"], "to" => $post["to"], "subject" => $post["subject"], "message" => $post["message"]);
         $r = $this->email_model->send($data);
         $this->response($r);
     }
