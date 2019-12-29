@@ -113,6 +113,18 @@ class Api extends REST_Controller
         $this->response($r);
     }
 
+    public function subm_post()
+    {
+        $post = json_decode(file_get_contents('php://input'), true);
+        if ($post['type'] = "update") {
+            $r = $this->subm_model->update($post['status'], $post['id']);
+        } else {
+            $data = array('title' => $post['data']['title'], 'description' => $post['data']['description'], 'type' => $post['data']['type'], 'language' => $post['data']['language'], 'level' => $post['data']['level'], 'theme' => $post['data']['theme'], 'orientation' => $post['data']['orientation'], 'status' => $post['data']['status'], 'info' => $post['data']['info']);
+            $r = $this->subm_model->insert($data, $id);
+        }
+        $this->response($r);
+    }
+
     //Ratings
 
     public function rating_get()

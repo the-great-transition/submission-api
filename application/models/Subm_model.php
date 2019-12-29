@@ -20,7 +20,7 @@ class Subm_model extends CI_Model
                     $rating = array('average' => 0, 'rated' => false);
                     $ratings = $this->db->get_where('user_subm', array('subm_id' => $a['subm_id']))->result_array();
                     foreach ($ratings as $r) {
-                        if ($r['user_id']===$user['id']) {
+                        if ($r['user_id'] === $user['id']) {
                             $rating['rated'] = true;
                         }
                         $rating['average'] += $r['user_subm_rating'];
@@ -78,6 +78,22 @@ class Subm_model extends CI_Model
                 } else {
                     show_error('err_id', 404);
                 }
+            }
+        }
+    }
+
+    public function update($input, $id)
+    {
+        $user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
+        if ($user) {
+            if ($id === null) {
+                show_error('err_id', 404);
+            }
+            $t = 'subm';
+            if ($this->db->update($t, array($t . "_status" => $input), array($t . '_id' => $id))) {
+                return false;
+            } else {
+                show_error('err_update', 500);
             }
         }
     }
