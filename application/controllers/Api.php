@@ -41,16 +41,24 @@ function random_str(
     return $str;
 }
 
+function slugify($text)
+{
+    $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+    $text = preg_replace('~[^-\w]+~', '', $text);
+    $text = trim($text, '-');
+    $text = preg_replace('~-+~', '-', $text);
+    $text = strtolower($text);
+
+    if (empty($text)) {
+        return 'n-a';
+    }
+
+    return $text;
+}
+
 class Api extends REST_Controller
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->load->model('Login_model');
-        $this->load->model('User_model');
-        $this->load->model('Room_model');
-    }
 
     //Login
 
@@ -115,11 +123,12 @@ class Api extends REST_Controller
 
     public function subm_post()
     {
+        $id = $this->uri->segment(3);
         $post = json_decode(file_get_contents('php://input'), true);
-        if ($post['type'] = "update") {
-            $r = $this->subm_model->update($post['status'], $post['id']);
+        if ($post['type'] === "update") {
+            $r = $this->subm_model->update($post['status'], $id);
         } else {
-            $data = array('title' => $post['data']['title'], 'description' => $post['data']['description'], 'type' => $post['data']['type'], 'language' => $post['data']['language'], 'level' => $post['data']['level'], 'theme' => $post['data']['theme'], 'orientation' => $post['data']['orientation'], 'status' => $post['data']['status'], 'info' => $post['data']['info']);
+            $data = array('subm_title' => $post['title'], 'subm_description' => $post['description'], 'subm_type' => $post['type']['value'], 'subm_language' => $post['language']['value'], 'subm_level' => $post['level']['value'], 'subm_theme' => $post['theme']['value'], 'subm_orientation' => $post['orientation']['value'], 'subm_status' => $post['status']['value'], 'subm_info' => $post['info']);
             $r = $this->subm_model->insert($data, $id);
         }
         $this->response($r);
@@ -166,6 +175,15 @@ class Api extends REST_Controller
     {
         $id = $this->uri->segment(3);
         $r = $this->comment_model->remove($id);
+        $this->response($r);
+    }
+
+    //Panelists
+
+    public function part_get()
+    {
+        $id = $this->uri->segment(3);
+        $r = $this->part_model->read($id);
         $this->response($r);
     }
 
