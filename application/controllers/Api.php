@@ -125,7 +125,7 @@ class Api extends REST_Controller
     {
         $id = $this->uri->segment(3);
         $post = json_decode(file_get_contents('php://input'), true);
-        if ($post['type'] === "update") {
+        if ($post['type'] === "status") {
             $r = $this->subm_model->update($post['status'], $id);
         } else {
             $data = array('subm_title' => $post['title'], 'subm_description' => $post['description'], 'subm_type' => $post['type']['value'], 'subm_language' => $post['language']['value'], 'subm_level' => $post['level']['value'], 'subm_theme' => $post['theme']['value'], 'subm_orientation' => $post['orientation']['value'], 'subm_status' => $post['status']['value'], 'subm_info' => $post['info']);
@@ -184,6 +184,19 @@ class Api extends REST_Controller
     {
         $id = $this->uri->segment(3);
         $r = $this->part_model->read($id);
+        $this->response($r);
+    }
+
+    public function part_post()
+    {
+        $id = $this->uri->segment(3);
+        $post = json_decode(file_get_contents('php://input'), true);
+        if ($post['type'] === "status") {
+            $r = $this->part_model->update($post['status'], $id);
+        } else {
+            $data = array('part_fname' => $post['fname'], 'part_lname' => $post['lname'], 'part_pronouns' => $post['pronouns'], 'part_email' => $post['email'], 'part_photo' => $post['photo'], 'part_affiliation' => $post['affiliation'], 'part_bio' => $post['bio'], 'part_city' => $post['city'], 'part_country' => $post['country'], 'part_gender' => $post['gender'], 'part_minority' => $post['minority'], 'user_id' => $post['user']['value']);
+            $r = $this->part_model->insert($data, $id);
+        }
         $this->response($r);
     }
 

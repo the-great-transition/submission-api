@@ -34,41 +34,41 @@ class part_model extends CI_Model
         }
     }
 
-    /*public function insert($input, $id)
-{
-$user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
-if ($user) {
-if ($id === null) {
-$data = array('part_id' => '', 'part_slug' => slugify($input['part_title']));
-$data = array_merge($data, $input);
-$add = array('user_id' => $user['id'], 'part_meta' => '');
-$data = array_merge($data, $add);
-if ($this->db->insert('part', $data)) {
-return false;
-} else {
-show_error('err_insert', 500);
-}
-} else {
+    public function insert($input, $id)
+    {
+        $user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
+        if ($user) {
+            if ($id === null) {
+                $data = array('part_id' => '', 'part_slug' => slugify($input['part_fname']." ".$input['part_lname']));
+                $data = array_merge($data, $input);
+                $add = array('part_status' => 0, 'subm_id' => 0, 'part_meta' => '');
+                $data = array_merge($data, $add);
+                if ($this->db->insert('part', $data)) {
+                    return false;
+                } else {
+                    show_error('err_insert', 500);
+                }
+            } else {
 
-}
-} else {
-show_error('err_update', 403);
-}
-}
+            }
+        } else {
+            show_error('err_update', 403);
+        }
+    }
 
-public function update($input, $id)
-{
-$user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
-if ($user) {
-if ($id === null) {
-show_error('err_id', 404);
-}
-$t = 'part';
-if ($this->db->update($t, array($t . "_status" => $input), array($t . '_id' => $id))) {
-return false;
-} else {
-show_error('err_update', 500);
-}
-}
-}*/
+    public function update($input, $id)
+    {
+        $user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
+        if ($user) {
+            if ($id === null) {
+                show_error('err_id', 404);
+            }
+            $t = 'part';
+            if ($this->db->update($t, array($t . "_status" => $input), array($t . '_id' => $id))) {
+                return false;
+            } else {
+                show_error('err_update', 500);
+            }
+        }
+    }
 }
