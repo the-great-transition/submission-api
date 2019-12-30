@@ -206,6 +206,9 @@ class Api extends REST_Controller
         $post = json_decode(file_get_contents('php://input'), true);
         if ($post['type'] === "comm") {
             $r = $this->subm_model->associate($post["comm_id"], $id);
+        } else if ($post['type'] === "part") {
+            $data = array("part_id" => $post["part_id"], "part_type" => $post["part_type"], "delete" => $post["delete"]);
+            $r = $this->part_model->associate($data, $id);
         }
         $this->response($r);
     }
