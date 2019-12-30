@@ -41,9 +41,11 @@ class Subm_model extends CI_Model
                     $s = array_merge($subm, $subm_user);
                     if ($subm['subm_type'] == 1 || $subm['subm_type'] == 2) {
                         $array = $this->db->get_where('part_subm', array($t . '_id' => $id, 'part_subm_type' => 1))->result_array();
-                        $chair = $array[0];
-                        $array = $this->db->get_where('part', array('part_id' => $chair['part_id']))->result_array();
-                        $s['chair'] = $array[0];
+                        if (count($array) > 0) {
+                            $chair = $array[0];
+                            $array = $this->db->get_where('part', array('part_id' => $chair['part_id']))->result_array();
+                            $s['chair'] = $array[0];
+                        }
                     }
                     $parts = [];
                     $comms = [];
@@ -119,4 +121,21 @@ class Subm_model extends CI_Model
             }
         }
     }
+
+    public function associate($input, $id)
+    {
+        $user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
+        if ($user) {
+            if ($id === null) {
+                show_error('err_id', 404);
+            }
+            $t = 'subm';
+            if ($this->db->update($t, array($t . "_forms" => $id), array($t . '_id' => $input))) {
+                return false;
+            } else {
+                show_error('err_update', 500);
+            }
+        }
+    }
+
 }

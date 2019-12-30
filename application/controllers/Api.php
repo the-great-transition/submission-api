@@ -200,6 +200,16 @@ class Api extends REST_Controller
         $this->response($r);
     }
 
+    public function associate_post()
+    {
+        $id = $this->uri->segment(3);
+        $post = json_decode(file_get_contents('php://input'), true);
+        if ($post['type'] === "comm") {
+            $r = $this->subm_model->associate($post["comm_id"], $id);
+        }
+        $this->response($r);
+    }
+
     //Room
 
     public function room_get()
