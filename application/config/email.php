@@ -11,3 +11,4 @@ $config['crlf'] = "\r\n";
 $config['newline'] = "\r\n";
 $config['bcc_batch_mode'] = true;
 $config['bcc_batch_size'] = 4;
+$config['mailtype'] = "html";
