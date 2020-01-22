@@ -22,6 +22,40 @@ class Comment_model extends CI_Model
                 }
                 return $output;
             }
+        } else {
+            show_error('err_permission', 403);
+        }
+    }
+
+    public function readall($status)
+    {
+        $user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
+        if ($user) {
+            if ($status == null) {
+                show_error('err_status', 404);
+            } else {
+                $output = array();
+                $submissions = $this->db->get_where("subm", array("subm_status" => $status))->result_array();
+                foreach ($submissions as $s) {
+                    $user = $this->db->get_where("user", array("user_id" => $s["user_id"]))->result_array();
+                    $s["user_name"] = $user[0]["user_name"];
+                    $append = array();
+                    $comments = $this->db->get_where("comm", array("subm_id" => $s["subm_id"]))->result_array();
+                    foreach ($comments as $c) {
+                        $user = $this->db->get_where("user", array("user_id" => $c["user_id"]))->result_array();
+                        $data = $c;
+                        $data["user_name"] = $user[0]["user_name"];
+                        array_push($append, $data);
+                    }
+                    if (sizeof($append) > 0) {
+                        $a = array("comm" => $append, "subm" => $s);
+                        array_push($output, $a);
+                    }
+                }
+                return $output;
+            }
+        } else {
+            show_error('err_permission', 403);
         }
     }
 
@@ -39,6 +73,8 @@ class Comment_model extends CI_Model
                     show_error('err_insert', 500);
                 }
             }
+        } else {
+            show_error('err_permission', 403);
         }
     }
 
@@ -54,6 +90,8 @@ class Comment_model extends CI_Model
             } else {
                 show_error('err_delete', 500);
             }
+        } else {
+            show_error('err_permission', 403);
         }
     }
 

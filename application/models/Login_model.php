@@ -14,7 +14,7 @@ class Login_model extends CI_Model
             if (password_verify($input['password'], $r[0]['user_password'])) {
                 $payload = array(
                     "iss" => "http://edito.lagrandetransition.net/api",
-                    "exp" => time() + (60 * 60 * 24),
+                    "exp" => time() + (60 * 60 * 24 * 3),
                     "id" => $r[0]['user_id'],
                     "name" => $r[0]['user_name'],
                     "email" => $r[0]['user_email'],
@@ -30,7 +30,7 @@ class Login_model extends CI_Model
                 show_error('err_password', 403);
             }
         } else {
-            show_error('err_email', 404);
+            show_error('err_email', 403);
         }
     }
 

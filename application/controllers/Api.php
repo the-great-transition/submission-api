@@ -116,8 +116,13 @@ class Api extends REST_Controller
 
     public function subm_get()
     {
-        $id = $this->uri->segment(3);
-        $r = $this->subm_model->read($id);
+        if ($this->input->get("status")) {
+            $status = $this->input->get("status");
+            $r = $this->subm_model->readstatus($status);
+        } else {
+            $id = $this->uri->segment(3);
+            $r = $this->subm_model->read($id);
+        }
         $this->response($r);
     }
 
@@ -128,7 +133,7 @@ class Api extends REST_Controller
         if ($post['type'] === "status") {
             $r = $this->subm_model->update($post['status'], $id);
         } else {
-            $data = array('subm_title' => $post['title'], 'subm_description' => $post['description'], 'subm_type' => $post['type']['value'], 'subm_language' => $post['language']['value'], 'subm_level' => $post['level']['value'], 'subm_theme' => $post['theme']['value'], 'subm_orientation' => $post['orientation']['value'], 'subm_status' => $post['status']['value'], 'subm_info' => $post['info']);
+            $data = array('subm_title' => $post['title'], 'subm_description' => $post['description'], 'subm_type' => $post['type']['value'], 'subm_language' => $post['language']['value'], 'subm_level' => $post['level']['value'], 'subm_theme' => $post['theme']['value'], 'subm_orientation' => $post['orientation']['value'], 'subm_status' => $post['status']['value'], 'subm_info' => $post['info'], "user_id" => $post["user"]["value"]);
             $r = $this->subm_model->insert($data, $id);
         }
         $this->response($r);
@@ -158,8 +163,13 @@ class Api extends REST_Controller
     public function comment_get()
     {
         $id = $this->uri->segment(3);
-        $r = $this->comment_model->read($id);
-        $this->response($r);
+        if ($this->input->get("status")) {
+            $r = $this->comment_model->readall($id);
+            $this->response($r);
+        } else {
+            $r = $this->comment_model->read($id);
+            $this->response($r);
+        }
     }
 
     public function comment_post()
