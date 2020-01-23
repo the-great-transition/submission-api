@@ -24,13 +24,7 @@ PANÉLISTE : 10 variables
 */
 
 class Import extends REST_Controller {
-	
-	public function __construct() {
-		parent::__construct();
-		$this->load->model('Import_model');
-		
-	}
-	
+	/*
 	public function import_get() {
 		//Forms: EN: 0/3553261, FR: 1/3553260
 		$id = $this->uri->segment(3);
@@ -43,6 +37,6 @@ class Import extends REST_Controller {
 		}
 		$this->response($r);
 	}
-	
+	*/
 }
 

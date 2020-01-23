@@ -223,6 +223,22 @@ class Api extends REST_Controller
         $this->response($r);
     }
 
+    public function confirmation_get()
+    {
+        $id = $this->uri->segment(3);
+        $r = $this->confirmation_model->read($id);
+        $this->response($r);
+    }
+
+    public function confirmation_post()
+    {
+        $id = $this->uri->segment(3);
+        $post = json_decode(file_get_contents('php://input'), true);
+        $data = array("subm_id" => $post["subm_id"], "confirmation" => $post["confirmation"]);
+        $r = $this->confirmation_model->update($id, $data);
+        $this->response($r);
+    }
+
     //Room
 
     public function room_get()

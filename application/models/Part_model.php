@@ -20,7 +20,7 @@ class part_model extends CI_Model
                     $part_subm = $this->db->get_where('part_subm', array('part_id' => $a['part_id']))->result_array();
                     if ($part_subm) {
                         foreach ($part_subm as $ps) {
-                            array_push($subm, array('subm_id' => $ps['subm_id'], 'part_subm_type' => $ps['part_subm_type']));
+                            array_push($subm, array('subm_id' => $ps['subm_id'], 'part_subm_type' => $ps['part_subm_type'], 'part_subm_confirmation' => $ps['part_subm_confirmation']));
                         }
                     }
                     $s['part_subm'] = $subm;
@@ -38,7 +38,7 @@ class part_model extends CI_Model
                     $part_subm = $this->db->get_where('part_subm', array('part_id' => $part['part_id']))->result_array();
                     if ($part_subm) {
                         foreach ($part_subm as $ps) {
-                            array_push($subm, array('subm_id' => $ps['subm_id'], 'part_subm_type' => $ps['part_subm_type']));
+                            array_push($subm, array('subm_id' => $ps['subm_id'], 'part_subm_type' => $ps['part_subm_type'], 'part_subm_confirmation' => $ps['part_subm_confirmation']));
                         }
                     }
                     $s['part_subm'] = $subm;
