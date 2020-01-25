@@ -234,7 +234,7 @@ class Api extends REST_Controller
     {
         $id = $this->uri->segment(3);
         $post = json_decode(file_get_contents('php://input'), true);
-        $data = array("subm_id" => $post["subm_id"], "confirmation" => $post["confirmation"]);
+        $data = array("subm_id" => $post["subm_id"], "confirmation" => $post["confirmation"], "part_subm_type" => $post["part_subm_type"]);
         $r = $this->confirmation_model->update($id, $data);
         $this->response($r);
     }
