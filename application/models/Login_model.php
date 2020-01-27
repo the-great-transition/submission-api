@@ -27,10 +27,10 @@ class Login_model extends CI_Model
                 $this->output->set_header('access-control-expose-headers: x-auth-token');
                 return 'success';
             } else {
-                show_error('err_password', 403);
+                show_error('err_password', 404);
             }
         } else {
-            show_error('err_email', 403);
+            show_error('err_email', 404);
         }
     }
 

@@ -65,7 +65,12 @@ class part_model extends CI_Model
                     show_error('err_insert', 500);
                 }
             } else {
-
+                $this->db->where('part_id', $id);
+                if ($this->db->update('part', $input)) {
+                    return false;
+                } else {
+                    show_error('err_insert', 500);
+                }
             }
         } else {
             show_error('err_update', 403);
