@@ -19,8 +19,7 @@ class Login_model extends CI_Model
                     "name" => $r[0]['user_name'],
                     "email" => $r[0]['user_email'],
                     "role" => $r[0]['user_role'],
-                    "language" => $r[0]['user_language'],
-
+                    "language" => $r[0]['user_language']
                 );
                 $token = JWT::encode($payload, $key);
                 $this->output->set_header('x-auth-token:' . $token);

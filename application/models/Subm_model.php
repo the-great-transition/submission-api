@@ -100,8 +100,10 @@ class Subm_model extends CI_Model
                     $array = $this->db->get_where('part_subm', array($t . '_id' => $s["subm_id"], 'part_subm_type' => 1))->result_array();
                     if (count($array) > 0) {
                         $chair = $array[0];
-                        $array = $this->db->get_where('part', array('part_id' => $chair['part_id']))->result_array();
-                        $s['chair'] = $array[0];
+                        $array2 = $this->db->get_where('part', array('part_id' => $chair['part_id']))->result_array();
+                        $s['chair'] = $array2[0];
+                        $s['chair']['part_subm_type'] = $chair['part_subm_type'];
+                        $s['chair']['part_subm_confirmation'] = $chair['part_subm_confirmation'];
                     }
                 }
                 if ($s['subm_type'] == 1) {
@@ -112,7 +114,8 @@ class Subm_model extends CI_Model
                         $a = $this->db->get_where('part_subm', array($t . '_id' => $c['subm_id'], 'part_subm_type' => 0))->result_array();
                         foreach ($a as $part) {
                             $r = $this->db->get_where('part', array('part_id' => $part['part_id']))->result_array();
-                            array_push($p, $r[0]);
+                            $return = array('part_subm_type' => $part['part_subm_type'], 'part_subm_confirmation' => $part['part_subm_confirmation']);
+                            array_push($p, array_merge($return, $r[0]));
                         }
                         $cp = $c;
                         $cp['parts'] = $p;
@@ -124,7 +127,9 @@ class Subm_model extends CI_Model
                     $array = $this->db->get_where('part_subm', array($t . '_id' => $s["subm_id"], 'part_subm_type' => 0))->result_array();
                     foreach ($array as $p) {
                         $a = $this->db->get_where('part', array('part_id' => $p['part_id']))->result_array();
-                        array_push($parts, $a[0]);
+                        $return = array('part_subm_type' => $p['part_subm_type'], 'part_subm_confirmation' => $p['part_subm_confirmation']);
+                        array_push($parts, array_merge($return, $a[0]));
+
                     }
                     $s["parts"] = $parts;
                 }
