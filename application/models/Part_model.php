@@ -47,6 +47,8 @@ class part_model extends CI_Model
                     show_error('err_id', 404);
                 }
             }
+        } else {
+            show_error('err_permission', 403);
         }
     }
 
@@ -73,7 +75,7 @@ class part_model extends CI_Model
                 }
             }
         } else {
-            show_error('err_update', 403);
+            show_error('err_permission', 403);
         }
     }
 
@@ -90,6 +92,8 @@ class part_model extends CI_Model
             } else {
                 show_error('err_update', 500);
             }
+        } else {
+            show_error('err_permission', 403);
         }
     }
 
@@ -114,6 +118,8 @@ class part_model extends CI_Model
                     show_error('err_update', 500);
                 }
             }
+        } else {
+            show_error('err_permission', 403);
         }
     }
 }

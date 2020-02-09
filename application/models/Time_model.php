@@ -1,14 +1,14 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Room_model extends CI_Model
+class Time_model extends CI_Model
 {
 
     public function read($id)
     {
         $user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
         if ($user) {
-            $t = 'room';
+            $t = 'time';
             if ($id === null) {
                 $query = $this->db->get($t);
                 return $query->result_array();
@@ -24,7 +24,7 @@ class Room_model extends CI_Model
     {
         $user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
         if ($user) {
-            $t = 'room';
+            $t = 'time';
             if ($id === null) {
                 $input[$t . '_id'] = '';
                 $input[$t . '_meta'] = '';
@@ -50,7 +50,7 @@ class Room_model extends CI_Model
     {
         $user = (array) tryKey($this->db->get_where('conf', array('conf_label' => 'jwt_key')), apache_request_headers());
         if ($user) {
-            $t = "room";
+            $t = "time";
             if ($id === null) {
                 show_error('err_id', 404);
             }

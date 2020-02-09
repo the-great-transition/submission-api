@@ -239,12 +239,53 @@ class Api extends REST_Controller
         $this->response($r);
     }
 
+    //Time
+
+    public function time_get()
+    {
+        $id = $this->uri->segment(3);
+        $r = $this->time_model->read($id);
+        $this->response($r);
+    }
+
+    public function time_post()
+    {
+        $id = $this->uri->segment(3);
+        $post = json_decode(file_get_contents('php://input'), true);
+        unset($post["type"]);
+        $r = $this->time_model->insert($id, $post);
+        $this->response($r);
+    }
+
+    public function time_delete()
+    {
+        $id = $this->uri->segment(3);
+        $r = $this->time_model->remove($id);
+        $this->response($r);
+    }
+
     //Room
 
     public function room_get()
     {
         $id = $this->uri->segment(3);
         $r = $this->room_model->read($id);
+        $this->response($r);
+    }
+
+    public function room_post()
+    {
+        $id = $this->uri->segment(3);
+        $post = json_decode(file_get_contents('php://input'), true);
+        unset($post["type"]);
+        $r = $this->room_model->insert($id, $post);
+        $this->response($r);
+    }
+
+    public function room_delete()
+    {
+        $id = $this->uri->segment(3);
+        $r = $this->room_model->remove($id);
         $this->response($r);
     }
 
