@@ -289,6 +289,31 @@ class Api extends REST_Controller
         $this->response($r);
     }
 
+    //Timeslots
+
+    public function timeslot_get()
+    {
+        $id = $this->uri->segment(3);
+        $r = $this->timeslot_model->read($id);
+        $this->response($r);
+    }
+
+    public function timeslot_post()
+    {
+        $id = $this->uri->segment(3);
+        $post = json_decode(file_get_contents('php://input'), true);
+        unset($post["type"]);
+        $r = $this->timeslot_model->insert($id, $post);
+        $this->response($r);
+    }
+
+    public function timeslot_delete()
+    {
+        $id = $this->uri->segment(3);
+        $r = $this->timeslot_model->remove($id);
+        $this->response($r);
+    }
+
     //Admin
 
     public function admin_get()
