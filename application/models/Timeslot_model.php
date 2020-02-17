@@ -40,7 +40,7 @@ class Timeslot_model extends CI_Model
             if ($id === null) {
                 show_error('err_id', 404);
             } else {
-                if ($input["subm"]) {
+                if (array_key_exists("subm", $input)) {
                     $this->db->where(array('subm_id' => $input["subm"]));
                     $this->db->update($t, array('subm_id' => 0));
                     $this->db->where(array('time_id' => $input["time"], 'room_id' => $id));
