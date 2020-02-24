@@ -145,7 +145,7 @@ class Subm_model extends CI_Model
         if ($user) {
             if ($id === null) {
                 $data = array_merge(array('subm_id' => '', 'subm_slug' => slugify($input['subm_title'])), $input);
-                $data = array_merge($data, array('subm_meta' => ''));
+                $data = array_merge($data, array('subm_meta' => 0));
                 if ($this->db->insert('subm', $data)) {
                     return false;
                 } else {
